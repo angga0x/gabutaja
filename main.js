@@ -24,11 +24,14 @@ async function connectToWhatsApp() {
     sock.ev.on('messages.upsert', async (m) => {
         const msg = m.messages[0]
 
-        const sender = msg.key.remoteJid.replace('@s.whatsapp.net', '')
+        const sender = msg.key.remoteJid
+        const sender_num = msg.key.remoteJid.replace('@s.whatsapp.net', '')
         const sender_name = msg.pushName
         const message = msg.message.conversation || msg.message.extendedTextMessage.text
         
-        console.log('Sender:', sender, 'Sender Name:', sender_name, 'Message:', message)
+        if (message === 'Hai') {
+            await sock.sendMessage(sender, { text: 'Hai juga' })
+        }
     })
 }
 
