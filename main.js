@@ -31,20 +31,21 @@ async function connectToWhatsApp() {
         const message = msg.message.conversation
 
         if (!msg.key.fromMe) {
-            if(message.toLocaleLowerCase() === 'saldo') {
-                await sock.readMessages([msg.key])
-                const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
-                await sock.sendMessage(sender, { text: `Hai ${sender_name}\nSisa saldo kamu saat ini adalah Rp. 200.000\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
             
-            } else if(message.startsWith('pln')) {
-                await sock.readMessages([msg.key])
-                const idPelanggan = message.split(' ')[1]
+            // if(message.toLocaleLowerCase() === 'saldo') {
+            //     await sock.readMessages([msg.key])
+            //     const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
+            //     await sock.sendMessage(sender, { text: `Hai ${sender_name}\nSisa saldo kamu saat ini adalah Rp. 200.000\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
+            
+            // } else if(message.startsWith('pln')) {
+            //     await sock.readMessages([msg.key])
+            //     const idPelanggan = message.split(' ')[1]
                 
-                const plnData = await validPlnFunc(idPelanggan)
+            //     const plnData = await validPlnFunc(idPelanggan)
 
-                const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
-                await sock.sendMessage(sender, { text: `Hai ${sender_name}\n\nCustomer number : ${plnData.customer_no}\nCustomer name : ${plnData.name}\nSegment Power : ${plnData.segment_power}\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
-            }
+            //     const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
+            //     await sock.sendMessage(sender, { text: `Hai ${sender_name}\n\nCustomer number : ${plnData.customer_no}\nCustomer name : ${plnData.name}\nSegment Power : ${plnData.segment_power}\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
+            // }
         }
     })
 }
