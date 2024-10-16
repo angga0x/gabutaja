@@ -1,5 +1,7 @@
 const { DisconnectReason, makeWASocket, useMultiFileAuthState, MessageType, MessageOptions, Mimetype } = require('@whiskeysockets/baileys')
 const validPlnFunc = require('./Function/valid_pln')
+const XLSX = require('xlsx')
+const fs = require('fs')
 
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
