@@ -1,4 +1,5 @@
 const { DisconnectReason, makeWASocket, useMultiFileAuthState, MessageType, MessageOptions, Mimetype } = require('@whiskeysockets/baileys')
+const validPlnFunc = require('./Function/valid_pln')
 
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
@@ -27,10 +28,23 @@ async function connectToWhatsApp() {
         const sender = msg.key.remoteJid
         const sender_num = msg.key.remoteJid.replace('@s.whatsapp.net', '')
         const sender_name = msg.pushName
-        const message = msg.message.conversation || msg.message.extendedTextMessage.text
-        
-        if (message === 'Hai') {
-            await sock.sendMessage(sender, { text: 'Hai juga' })
+        const message = msg.message.conversation
+
+        if (!msg.key.fromMe) {
+            if(message.toLocaleLowerCase() === 'saldo') {
+                await sock.readMessages([msg.key])
+                const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
+                await sock.sendMessage(sender, { text: `Hai ${sender_name}\nSisa saldo kamu saat ini adalah Rp. 200.000\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
+            
+            } else if(message.startsWith('pln')) {
+                await sock.readMessages([msg.key])
+                const idPelanggan = message.split(' ')[1]
+                
+                const plnData = await validPlnFunc(idPelanggan)
+
+                const date = new Date().toLocaleString('id-US', { timeZone: 'Asia/Jakarta' })
+                await sock.sendMessage(sender, { text: `Hai ${sender_name}\n\nCustomer number : ${plnData.customer_no}\nCustomer name : ${plnData.name}\nSegment Power : ${plnData.segment_power}\n\n_Updated at_ _:_ _${date}_` }, { quoted: msg })
+            }
         }
     })
 }
